@@ -17,8 +17,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/auth/register', 'Web\User\Auth\RegisterController@index')->name('user.auth.register.index');
-Route::post('/auth/register', 'Web\User\Auth\RegisterController@register')->name('user.auth.register');
 
-Route::get('/auth/login', 'Web\User\Auth\LoginController@index')->name('user.auth.login.index');
-Route::post('/auth/login', 'Web\User\Auth\LoginController@authenticate')->name('user.auth.login');
+Route::group(["namespace" => "Web"], function () {
+
+    Route::group(["namespace" => "User"], function () {
+        Route::group(["prefix" => "auth", "namespace" => "Auth"], function () {
+            Route::get('/register', 'RegisterController@index')->name('user.auth.register.index');
+            Route::post('/register', 'RegisterController@register')->name('user.auth.register');
+            Route::get('/login', 'LoginController@index')->name('user.auth.login.index');
+            Route::post('/login', 'LoginController@authenticate')->name('user.auth.login');
+        });
+    });
+
+    Route::group(["namespace" => "Admin", "prefix" => "backyard"], function () {
+        Route::group(["prefix" => "management"], function () {
+            Route::get('/user', 'UserController@index')->name('admin.user.index');
+        });
+    });
+});

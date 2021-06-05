@@ -11,8 +11,10 @@
     <form action="{{ route("user.auth.login") }}" method="POST">
         @csrf
         <input type="email" name="email" placeholder="email">
-        <input type="password" name="password" placeholder="password">
+        <input type="password" name="password" placeholder="password" value="password">
         <button type="submit">Login</button>
     </form>
+
+    <a href="register">register</a>
 </body>
 </html>
