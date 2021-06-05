@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\User\Auth;
+namespace App\Http\Controllers\Web\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,14 +11,14 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view("web.user.auth.login");
+        return view("web.admin.auth.login");
     }
 
     public function authenticate(Request $request)
     {
         Validator::make($request->all(), [
             "name" => "required",
-            "email" => "required|exists:users",
+            "email" => "required|exists:admins",
             "password" => "required",
         ]);
 
@@ -27,7 +27,7 @@ class LoginController extends Controller
             "password" => $request->password,
         ];
 
-        $auth = auth()->attempt($credentials);
+        $auth = auth()->guard("web_admin")->attempt($credentials);
 
         if ($auth) {
             $session = $request->session()->regenerate();

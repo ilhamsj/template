@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Register</h1>
+    <h1>List</h1>
     <table>
         <tr>
             <td>#</td>
@@ -15,14 +15,18 @@
             <td>Email</td>
             <td>Sandi</td>
         </tr>
-    </table>
-    @foreach ($users as $item)
+        @foreach ($users as $item)
         <tr>
             <td>{{ $item->id }}</td>
             <td>{{ $item->name }}</td>
             <td>{{ $item->email }}</td>
             <td>{{ $item->password }}</td>
         </tr>
-    @endforeach
+        @endforeach
+    </table>
+    <form action="{{ route("user.auth.logout") }}" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>
