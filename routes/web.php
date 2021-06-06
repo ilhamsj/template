@@ -28,14 +28,20 @@ Route::group(["namespace" => "Web"], function () {
     Route::group(["namespace" => "Admin", "prefix" => "backyard", "as" => "backyard."], function () {
 
         Route::group(["prefix" => "auth", "namespace" => "Auth", "as" => "auth."], function () {
-            Route::get('/register', 'RegisterController@index')->name('register.index');
-            Route::post('/register', 'RegisterController@register')->name('register');
-            Route::get('/login', 'LoginController@index')->name('login.index');
-            Route::post('/login', 'LoginController@authenticate')->name('login');
+
+            Route::group(["middleware" => "guest:web_admin"], function () {
+                Route::get('/register', 'RegisterController@index')->name('register.index');
+                Route::post('/register', 'RegisterController@register')->name('register');
+                Route::get('/login', 'LoginController@index')->name('login.index');
+                Route::post('/login', 'LoginController@authenticate')->name('login');
+            });
+
             Route::post('/logout', 'LoginController@logout')->name('logout');
         });
 
-        Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+        Route::group(["middleware" => "auth:web_admin"], function () {
+            Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+        });
     });
 
     /*
@@ -46,15 +52,20 @@ Route::group(["namespace" => "Web"], function () {
     Route::group(["namespace" => "User", "as" => "user."], function () {
 
         // auth
-        Route::group(["prefix" => "auth", "namespace" => "Auth", "as" => "auth.", "middleware" => "guest"], function () {
-            Route::get('/register', 'RegisterController@index')->name('register.index');
-            Route::post('/register', 'RegisterController@register')->name('register');
-            Route::get('/login', 'LoginController@index')->name('login.index');
-            Route::post('/login', 'LoginController@authenticate')->name('login');
+        Route::group(["prefix" => "auth", "namespace" => "Auth", "as" => "auth."], function () {
+            Route::group(["middleware" => "guest"], function () {
+                Route::get('/register', 'RegisterController@index')->name('register.index');
+                Route::post('/register', 'RegisterController@register')->name('register');
+                Route::get('/login', 'LoginController@index')->name('login.index');
+                Route::post('/login', 'LoginController@authenticate')->name('login');
+            });
+
             Route::post('/logout', 'LoginController@logout')->name('logout');
         });
 
-        Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+        Route::group(["middleware" => "auth"], function () {
+            Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+        });
     });
 
     /*

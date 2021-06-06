@@ -30,29 +30,15 @@ class LoginController extends Controller
         $auth = auth()->attempt($credentials);
 
         if ($auth) {
-            $session = $request->session()->regenerate();
-            return response()->json([
-                "success" => true,
-                "message" => "Regenerate success",
-                "data"  => $session
-            ]);
+            return redirect()->route("user.dashboard");
         } else {
-            return response()->json([
-                "success" => false,
-                "message" => "Regenerate Failed",
-                "data"  => $auth
-            ]);
+            return redirect()->route("user.auth.login.index");
         }
     }
 
     public function logout(Request $request)
     {
         $logout = auth()->logout();
-
-        return response()->json([
-            "success" => true,
-            "message" => "Logout Success",
-            "data"  => $logout
-        ]);
+        return redirect()->route("user.auth.login.index");
     }
 }

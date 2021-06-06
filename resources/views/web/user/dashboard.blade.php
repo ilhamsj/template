@@ -9,5 +9,9 @@
 <body>
     <h1>Dashboard User</h1>
     <a href="{{ route("user.auth.logout") }}"></a>
+    <form action="{{ route("user.auth.logout") }}" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>

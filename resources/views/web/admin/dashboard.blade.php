@@ -8,6 +8,9 @@
 </head>
 <body>
     <h1>Dashboard admin</h1>
-    <a href="{{ route("backyard.auth.logout") }}"></a>
+    <form action="{{ route("backyard.auth.logout") }}" method="POST">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
 </body>
 </html>
