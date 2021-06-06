@@ -20,11 +20,6 @@ Route::get('/', function () {
 
 Route::group(["namespace" => "Web"], function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | BACKYARD
-    |--------------------------------------------------------------------------
-    */
     Route::group(["namespace" => "Admin", "prefix" => "backyard", "as" => "backyard."], function () {
 
         Route::group(["prefix" => "auth", "namespace" => "Auth", "as" => "auth."], function () {
@@ -36,7 +31,7 @@ Route::group(["namespace" => "Web"], function () {
                 Route::post('/login', 'LoginController@authenticate')->name('login');
             });
 
-            Route::post('/logout', 'LoginController@logout')->name('logout');
+            Route::post('/logout', 'LoginController@logout')->name('logout')->middleware("auth:web_admin");
         });
 
         Route::group(["middleware" => "auth:web_admin"], function () {
@@ -44,14 +39,8 @@ Route::group(["namespace" => "Web"], function () {
         });
     });
 
-    /*
-    |--------------------------------------------------------------------------
-    | USER
-    |--------------------------------------------------------------------------
-    */
     Route::group(["namespace" => "User", "as" => "user."], function () {
 
-        // auth
         Route::group(["prefix" => "auth", "namespace" => "Auth", "as" => "auth."], function () {
             Route::group(["middleware" => "guest"], function () {
                 Route::get('/register', 'RegisterController@index')->name('register.index');
@@ -60,17 +49,11 @@ Route::group(["namespace" => "Web"], function () {
                 Route::post('/login', 'LoginController@authenticate')->name('login');
             });
 
-            Route::post('/logout', 'LoginController@logout')->name('logout');
+            Route::post('/logout', 'LoginController@logout')->name('logout')->middleware("auth:web");
         });
 
-        Route::group(["middleware" => "auth"], function () {
+        Route::group(["middleware" => "auth:web"], function () {
             Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
         });
     });
-
-    /*
-    |--------------------------------------------------------------------------
-    | GUEST
-    |--------------------------------------------------------------------------
-    */
 });
