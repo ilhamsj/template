@@ -42,7 +42,7 @@ Route::group(["namespace" => "Web"], function () {
     Route::group(["namespace" => "User", "as" => "user."], function () {
 
         Route::group(["prefix" => "auth", "namespace" => "Auth", "as" => "auth."], function () {
-            Route::group(["middleware" => "guest"], function () {
+            Route::group(["middleware" => "guest:web"], function () {
                 Route::get('/register', 'RegisterController@index')->name('register.index');
                 Route::post('/register', 'RegisterController@register')->name('register');
                 Route::get('/login', 'LoginController@index')->name('login.index');
